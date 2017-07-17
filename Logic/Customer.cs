@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,22 +10,28 @@ namespace Logic
     /// <summary>
     /// Customer class with the fields "Name", "ContactPhone" and "Revenue"
     /// </summary>
-    public class Customer
+    public class Customer : IFormattable
     {
         /// <summary>
         /// Class Properties
         /// </summary>
+
         #region Properties
+
         /// <value>The Name property gets/sets the value of the string field name</value>
         public string Name { get; set; }
+
         /// <value>The Name property gets/sets the value of the string field contactPhone</value>
         public string ContactPhone { get; set; }
+
         /// <value>The Name property gets/sets the value of the decimal field revenue</value>
         public decimal Revenue { get; set; }
+
         #endregion
 
 
         #region Ctors
+
         /// <summary>
         /// Ctor with 2 parameters of a "Customer" class
         /// </summary>
@@ -36,7 +43,8 @@ namespace Logic
             Name = name;
             ContactPhone = contactPhone;
             Revenue = revenue;
-        } 
+        }
+
         /// <summary>
         /// Ctor with no parameters of a "Customer" class
         /// Establish default value for all properties
@@ -47,33 +55,37 @@ namespace Logic
             ContactPhone = "+375(33)6666666";
             Revenue = 10000;
         }
+
         #endregion
 
 
         #region Methods
+
         /// <summary>
         /// Owerreded method "ToString"
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return this.ToString("DEF");
+            return this.ToString("G", CultureInfo.CurrentCulture);
         }
+
         /// <summary>
         /// Format ToSrting method
         /// </summary>
         /// <param name="format">String.Format wich you can use:
-        /// "DEF", "P", "NR", "N" or "R"</param>
+        /// "G", "P", "NR", "N" or "R"</param>
         /// <returns>Returns string representation of a Customer class, 
         /// demends of wich format you use.</returns>
-        public string ToString(string format)
+       public string ToString(string format, IFormatProvider formatProvider)
         {
-            if (String.IsNullOrEmpty(format)) format = "DEF";
+            if (String.IsNullOrEmpty(format)) format = "G";
             format = format.Trim().ToUpperInvariant();
-            
+            if (ReferenceEquals(formatProvider, null)) formatProvider = CultureInfo.InvariantCulture;
+
             switch (format)
             {
-                case "DEF":
+                case "G":
                     return $"Customer record: {this.Name}, {this.Revenue:N}, {this.ContactPhone}";
                 case "PH":
                     return $"Customer record: {this.ContactPhone}";
@@ -86,7 +98,8 @@ namespace Logic
                 default:
                     throw new FormatException($"The \"{format}\" format string is not supported.");
             }
+
+            #endregion
         }
-        #endregion
     }
 }

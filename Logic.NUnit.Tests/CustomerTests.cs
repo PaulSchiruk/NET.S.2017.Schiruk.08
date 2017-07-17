@@ -42,41 +42,5 @@ namespace Logic.NUnit.Tests
         }
     }
 
-    public class AdditionalFormatsProvider : IFormatProvider, ICustomFormatter
-    {
-        IFormatProvider _parent;
-        public AdditionalFormatsProvider() : this (CultureInfo.CurrentCulture) { }
-
-        public AdditionalFormatsProvider(IFormatProvider parent)
-        {
-            _parent = parent;
-        }
-
-        public string Format(string format, object arg, IFormatProvider formatProvider)
-        {
-            if (arg == null || format != "QWE")
-                return string.Format(_parent, "{0:" + format + "}", arg);
-            
-
-            StringBuilder result = new StringBuilder();
-            string pattern = @"[0-9]";
-            string sentence = arg.ToString();
-            foreach (Match match in Regex.Matches(sentence, pattern))
-                result.Append(match.Value);
-            decimal number = Decimal.Parse(result.ToString());
-
-            if (number >= 10000)
-                return $"He has a very good revenue";
-            if (number <= 1000)
-                return $"How he has not yet died with such revenue?";
-            
-                return $"Not so bad";
-        }
-
-        public object GetFormat(Type formatType)
-        {
-            if (formatType == typeof(ICustomFormatter)) return this;
-            return null;
-        }
-    }
+    
 }
